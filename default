@@ -1,0 +1,37 @@
+server {
+    listen 80 default_server;
+ 
+    server_name 127.0.0.1 localhost;
+ 
+    root /var/www/html/thunder-8.x-2.44;
+    index index.php index.html index.htm;
+
+    location / {
+    try_files $uri /index.php?$query_string;        
+    }
+
+    location @rewrite {
+               rewrite ^/(.*)$ /index.php?q=$1;
+        }
+
+    location ~ \.php$ {
+        proxy_read_timeout 61;
+        fastcgi_read_timeout 61;
+        try_files $uri $uri/ =404;
+        #   Путь к сокету PHP-FPM
+        fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ ^/sites/.*/files/styles/ {
+               try_files $uri @rewrite;
+        }
+
+    location ~ ^(/[a-z\-]+)?/system/files/ {
+        try_files $uri /index.php?$query_string;
+        }
+     
+    error_log /var/log/nginx/api_error.log;
+    access_log /var/log/nginx/api_access.log;
+}

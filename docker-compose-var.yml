@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7.26
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - .env
+    volumes:
+      - ./databases:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+
+  app_thunder:
+    image: arnio/thunder
+    env_file:
+      - .env
+    ports:
+      - "8000:80"
+    links:
+      - db:db
+    restart: always
