@@ -15,7 +15,7 @@ services:
       - ./databases:/var/lib/mysql
     ports:
       - "3306:3306"
-    restart: always
+    restart: always21212
 
   app_thunder:
     image: arnio/thunder
