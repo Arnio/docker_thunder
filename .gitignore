@@ -1,5 +1,5 @@
 databases/*
-**/databases
+**/databasesewf
 **/*.tar.gz
 
 .DS_Store
