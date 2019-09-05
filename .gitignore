@@ -1,6 +1,6 @@
 databases/*
 **/databases
-**/*.tar.gz
+
 
 .DS_Store
 settings.local.php
