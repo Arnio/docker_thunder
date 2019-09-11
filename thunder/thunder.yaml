@@ -24,7 +24,7 @@ objects:
   subjects:
   - kind: ServiceAccount
     name: jenkins
-    namespace: jenkins_ci
+    namespace: jenkins-ci
     
 
 - apiVersion: v1
