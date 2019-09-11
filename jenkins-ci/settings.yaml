@@ -28,6 +28,25 @@ objects:
     kind: User
     name: ${USER_NAME}
 
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    generation: 1
+    name: alpine
+    namespace: openshift
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker.io/alpine:3.10
+      generation: 1
+      importPolicy: {}
+      name: "3.10"
+      referencePolicy:
+        type: Source
 
 - apiVersion: security.openshift.io/v1
   kind: SecurityContextConstraints
@@ -66,28 +85,6 @@ objects:
   allowedCapabilities: null
   priority: 10
   readOnlyRootFilesystem: false
-
-- apiVersion: image.openshift.io/v1
-  kind: ImageStream
-  metadata:
-    generation: 1
-    name: alpine
-    namespace: openshift
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: docker.io/alpine:3.10
-      generation: 1
-      importPolicy: {}
-      name: "3.10"
-      referencePolicy:
-        type: Source
-
-
 
 parameters:
 
