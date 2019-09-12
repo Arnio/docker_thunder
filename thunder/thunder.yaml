@@ -221,6 +221,28 @@ objects:
         - env:
           - name: EZ
             value: Europe/Kiev
+          - name: MYSQL_HOST
+            value: mysql.${APP_NAME}.svc
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: mysql
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: mysql
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-root-password
+                name: mysql
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: mysql            
           image: 172.30.1.1:5000/${JENKINS_NAME}/${APP_NAME}
           imagePullPolicy: Always
           name: ${APP_NAME}
