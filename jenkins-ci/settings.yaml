@@ -31,7 +31,6 @@ objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    generation: 1
     name: alpine
     namespace: openshift
   spec:
@@ -42,7 +41,6 @@ objects:
       from:
         kind: DockerImage
         name: docker.io/alpine:3.10
-      generation: 1
       importPolicy: {}
       name: "3.10"
       referencePolicy:
@@ -98,5 +96,9 @@ parameters:
   displayName: Add app name to openshift
   name: APP_NAME
   required: true
-  value: thunder
-    
+
+- description: Jenkins name to openshift
+  displayName: Jenkins name to openshift
+  name: JENKINS_NAME
+  required: true
+ 
