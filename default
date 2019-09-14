@@ -3,7 +3,7 @@ server {
  
     server_name 127.0.0.1 localhost;
  
-    root /var/www/html/thunder-8.x-2.44;
+    root /var/www/html/thunder;
     index index.php index.html index.htm;
 
     location / {
