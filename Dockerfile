@@ -6,6 +6,7 @@ FROM arnio/alpine-fpm7.3
 ADD /thunder-8.x-3.1-core.tar.gz /tmp/
 RUN mv /tmp/thunder-8.x-3.1 /var/www/html/thunder && \
     cd /var/www/html/thunder && \
+    composer require drush/drush:master && \
     composer install --no-progress --profile --prefer-dist && \
     chown -R nginx:nginx /var/www/html
 
