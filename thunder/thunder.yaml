@@ -290,7 +290,7 @@ objects:
             volumeMounts:
               - mountPath: /var/log/nginx
                 name: ${APP_NAME}-nginx-log
-              - mountPath: /var/www/html/thunder/sites
+              - mountPath: /var/www/html/thunder/sites/default
                 name: app-sites
               - mountPath: /var/log/php7
                 name: php-log
