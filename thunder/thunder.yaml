@@ -15,12 +15,10 @@ objects:
   kind: RoleBinding
   metadata:
     name: edit
-#    namespace: ${JENKINS_PROJECT_NAME}
   roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: ClusterRole
     name: edit
-#    namespace: ${JENKINS_PROJECT_NAME}
   subjects:
   - kind: ServiceAccount
     name: jenkins
@@ -39,7 +37,6 @@ objects:
       app: mysql-persistent
       template: mysql-persistent-template
     name: mysql
-#    namespace: ${APP_NAME}
   stringData:
     database-name: ${MYSQL_DATABASE}
     database-password: ${MYSQL_PASSWORD}
@@ -62,6 +59,17 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
+    name: 4g
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 4Gi
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
     name: 5g
   spec:
     accessModes:
@@ -69,6 +77,17 @@ objects:
     resources:
       requests:
         storage: 5Gi
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: site-pvc
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 15Gi
 
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
@@ -80,7 +99,6 @@ objects:
       app: mysql-persistent
       template: mysql-persistent-template
     name: mysql
-#    namespace: ${APP_NAME}
   spec:
     replicas: 1
     revisionHistoryLimit: 10
@@ -185,16 +203,14 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftWebConsole
-    generation: 20
     labels:
       app: ${APP_NAME}
+      application: ${APP_NAME}
     name: ${APP_NAME}
-#    namespace: ${APP_NAME}
-
+    namespace: ${APP_NAME}
   spec:
     replicas: 1
+    revisionHistoryLimit: 10
     selector:
       app: ${APP_NAME}
       deploymentconfig: ${APP_NAME}
@@ -205,6 +221,16 @@ objects:
         intervalSeconds: 1
         maxSurge: 25%
         maxUnavailable: 25%
+        post:
+          execNewPod:
+            command:
+              - initapp
+            containerName: ${APP_NAME}
+            volumes:
+              - app-sites
+              - ${APP_NAME}-nginx-log
+              - php-log
+          failurePolicy: Abort
         timeoutSeconds: 800
         updatePeriodSeconds: 1
       type: Rolling
@@ -218,71 +244,83 @@ objects:
           deploymentconfig: ${APP_NAME}
       spec:
         containers:
-        - env:
-          - name: EZ
-            value: Europe/Kiev
-          - name: MYSQL_HOST
-            value: mysql.${APP_NAME}.svc
-          - name: MYSQL_USER
-            valueFrom:
-              secretKeyRef:
-                key: database-user
-                name: mysql
-          - name: MYSQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: database-password
-                name: mysql
-          - name: MYSQL_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: database-root-password
-                name: mysql
-          - name: MYSQL_DATABASE
-            valueFrom:
-              secretKeyRef:
-                key: database-name
-                name: mysql            
-          image: 172.30.1.1:5000/${JENKINS_NAME}/${APP_NAME}
-          imagePullPolicy: Always
-          name: ${APP_NAME}
-          ports:
-          - containerPort: 80
-            protocol: TCP
-          resources:
-            limits:
-              cpu: 500m
-              memory: 756Mi
-            requests:
-              cpu: 100m
-              memory: 256Mi
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /var/log/nginx
-            name: ${APP_NAME}-nginx-log
+          - env:
+              - name: EZ
+                value: Europe/Kiev
+              - name: MYSQL_HOST
+                value: mysql.${APP_NAME}.svc
+              - name: MYSQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: database-user
+                    name: mysql
+              - name: MYSQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: database-password
+                    name: mysql
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: database-root-password
+                    name: mysql
+              - name: MYSQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: database-name
+                    name: mysql
+            image: >-
+              docker-registry.default.svc:5000/jenkins-app/${APP_NAME}
+            imagePullPolicy: Always
+            name: ${APP_NAME}
+            ports:
+              - containerPort: 80
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+              - mountPath: /var/log/nginx
+                name: ${APP_NAME}-nginx-log
+              - mountPath: /var/www/html/thunder/sites
+                name: app-sites
+              - mountPath: /var/log/php7
+                name: php-log
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-        - name: ${APP_NAME}-nginx-log
-          persistentVolumeClaim:
-            claimName: 5g
+          - name: ${APP_NAME}-nginx-log
+            persistentVolumeClaim:
+              claimName: 5g
+          - name: app-sites
+            persistentVolumeClaim:
+              claimName: site-pvc
+          - name: php-log
+            persistentVolumeClaim:
+              claimName: 4g
     test: false
     triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: false
-        containerNames:
-        - ${APP_NAME}
-        from:
-          kind: ImageStreamTag
-          name: ${APP_NAME}:latest
-          namespace: ${JENKINS_NAME}
-        lastTriggeredImage: 172.30.1.1:5000/${JENKINS_NAME}/${APP_NAME}
-      type: ImageChange
+      - imageChangeParams:
+          containerNames:
+            - ${APP_NAME}
+          from:
+            kind: ImageStreamTag
+            name: '${APP_NAME}:latest'
+            namespace: jenkins-app
+          lastTriggeredImage: >-
+            docker-registry.default.svc:5000/jenkins-app/${APP_NAME}
+        type: ImageChange
+      - type: ConfigChange
+
 
 - apiVersion: v1
   kind: Service
@@ -293,7 +331,6 @@ objects:
       app: mysql-persistent
       template: mysql-persistent-template
     name: mysql
-#    namespace: ${APP_NAME}
   spec:
     ports:
     - name: mysql
@@ -315,7 +352,6 @@ objects:
     labels:
       app: ${APP_NAME}
     name: ${APP_NAME}
-#    namespace: ${APP_NAME}
   spec:
     ports:
     - name: 80-tcp
@@ -337,7 +373,6 @@ objects:
     labels:
       app: ${APP_NAME}
     name: ${APP_NAME}
-#    namespace: ${APP_NAME}
   spec:
     port:
       targetPort: 80-tcp
