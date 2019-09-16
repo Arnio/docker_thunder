@@ -7,7 +7,7 @@ ADD /thunder-8.x-3.1-core.tar.gz /tmp/
 RUN mv /tmp/thunder-8.x-3.1 /var/www/html/thunder && \
     cd /var/www/html/thunder && \
     composer install --no-progress --profile --prefer-dist && \
-    chown -R nginx:nginx /var/www/html
+    composer require drush/drush:master && chown -R nginx:nginx /var/www/html
 
 COPY ./default /etc/nginx/conf.d/default.conf
 COPY ./settings /tmp/settings
