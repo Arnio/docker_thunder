@@ -138,7 +138,7 @@ objects:
               secretKeyRef:
                 key: database-name
                 name: mysql
-          image: 172.30.1.1:5000/openshift/mysql
+          image: docker-registry.default.svc:5000/openshift/mysql
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -196,7 +196,7 @@ objects:
           kind: ImageStreamTag
           name: mysql:${MYSQL_VERSION}
           namespace: openshift
-        lastTriggeredImage: 172.30.1.1:5000/openshift/mysql
+        lastTriggeredImage: docker-registry.default.svc:5000/openshift/mysql
       type: ImageChange
     - type: ConfigChange
 
@@ -226,7 +226,7 @@ objects:
             command:
               - /bin/sh
               - -c
-              - bash initapp.sh
+              - initapp.sh
             containerName: ${APP_NAME}
             volumes:
               - app-sites
