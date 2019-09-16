@@ -209,7 +209,6 @@ objects:
     name: ${APP_NAME}
     namespace: ${APP_NAME}
   spec:
-    replicas: 1
     revisionHistoryLimit: 10
     selector:
       app: ${APP_NAME}
@@ -272,7 +271,7 @@ objects:
                     key: database-name
                     name: mysql
             image: >-
-              docker-registry.default.svc:5000/jenkins-app/${APP_NAME}
+              docker-registry.default.svc:5000/${JENKINS_NAME}/${APP_NAME}
             imagePullPolicy: Always
             name: ${APP_NAME}
             ports:
@@ -317,9 +316,9 @@ objects:
           from:
             kind: ImageStreamTag
             name: '${APP_NAME}:latest'
-            namespace: jenkins-app
+            namespace: ${JENKINS_NAME}
           lastTriggeredImage: >-
-            docker-registry.default.svc:5000/jenkins-app/${APP_NAME}
+            docker-registry.default.svc:5000/${JENKINS_NAME}/${APP_NAME}
         type: ImageChange
       - type: ConfigChange
 
