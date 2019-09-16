@@ -10,5 +10,6 @@ RUN mv /tmp/thunder-8.x-3.1 /var/www/html/thunder && \
     chown -R nginx:nginx /var/www/html
 
 COPY ./default /etc/nginx/conf.d/default.conf
+COPY ./sites /tmp/
 EXPOSE 80
 ENTRYPOINT [ "start.sh" ]

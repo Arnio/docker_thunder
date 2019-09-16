@@ -224,7 +224,7 @@ objects:
         post:
           execNewPod:
             command:
-              - initapp
+              - initapp.sh
             containerName: ${APP_NAME}
             volumes:
               - app-sites
