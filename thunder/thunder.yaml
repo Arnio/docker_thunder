@@ -209,6 +209,7 @@ objects:
     name: ${APP_NAME}
     namespace: ${APP_NAME}
   spec:
+    replicas: 1
     revisionHistoryLimit: 10
     selector:
       app: ${APP_NAME}
