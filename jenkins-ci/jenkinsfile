@@ -1,0 +1,4 @@
+node('') {
+stage ('buildInJankins')
+  {openshiftBuild(namespace: 'jenkins-app', buildConfig: 'thunder-app', showBuildLogs: 'true',  waitTime: '3000000')}
+}

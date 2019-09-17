@@ -204,7 +204,19 @@ objects:
     - imageChange:
         lastTriggeredImageID: docker.io/alpine
       type: ImageChange
- 
+
+- kind: "BuildConfig"
+  apiVersion: "v1"
+  metadata:
+    name: build-app-image
+  spec:
+    source:
+      git:
+        uri: "https://github.com/Arnio/docker_thunder"
+    strategy:
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: jenkins-ci/jenkinsfile
+
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
