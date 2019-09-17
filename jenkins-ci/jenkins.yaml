@@ -259,6 +259,21 @@ objects:
             {openshiftBuild(namespace: '${JENKINS_NAME}', buildConfig: '${APP_NAME}', showBuildLogs: 'true',  waitTime: '3000000')}
           stage ('deployInDevelopment')
             {openshiftDeploy(namespace: '${APP_NAME}', deploymentConfig: '${APP_NAME}', waitTime: '3000000')}
+          stage ('VerifySiteOnline')
+            {sh '''#!/bin/bash
+          while [ 1 ]; do
+            http_response=$(curl -o /dev/null -s -w "%{http_code}\n" http://${APP_NAME}.${APP_NAME}.svc:80)
+
+            if [ $http_response = "200" ]; then
+                break
+            fi
+          done
+
+          echo ----------------------------------------end
+          build------------------------------------
+
+          echo $http_response'''}
+
 
           }
       type: JenkinsPipeline
