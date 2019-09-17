@@ -101,6 +101,9 @@ objects:
             value: jenkins
           - name: JNLP_SERVICE_NAME
             value: jenkins-jnlp
+          - name: INSTALL_PLUGINS
+            value: >-
+              locale,saferestart,ghprb            
           image: docker-registry.default.svc:5000/openshift/jenkins
           imagePullPolicy: IfNotPresent
           livenessProbe:
@@ -222,6 +225,16 @@ objects:
       jenkinsPipelineStrategy:
         jenkinsfile: |-
           node('') {
+          stage ('checscm') 
+          {
+          properties([pipelineTriggers([[$class: 'GitHubPushTrigger'], pollSCM('H/3 * * * *')])])   
+          checkout([$class: 'GitSCM', 
+              branches: [[name: '*/master']], 
+              doGenerateSubmoduleConfigurations: false, 
+              extensions: [[$class: 'CleanCheckout']], 
+              submoduleCfg: [], 
+              userRemoteConfigs: [[credentialsId: 'jenkins-app-git-key', url: 'https://github.com/Arnio/php_alpine_base_image.git']]
+          ])}
           stage ('buildInJankins')
             {openshiftBuild(namespace: '${JENKINS_NAME}', buildConfig: 'php-fpm-alpine', showBuildLogs: 'true',  waitTime: '3000000')}
           }
