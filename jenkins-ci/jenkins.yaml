@@ -103,7 +103,11 @@ objects:
             value: jenkins-jnlp
           - name: INSTALL_PLUGINS
             value: >-
-              locale,saferestart,ghprb            
+              locale,saferestart,ghprb 
+          - name: JENKINS_NAME
+            value: ${JENKINS_NAME}
+          - name: APP_NAME
+            value: ${APP_NAME}                      
           image: docker-registry.default.svc:5000/openshift/jenkins
           imagePullPolicy: IfNotPresent
           livenessProbe:
