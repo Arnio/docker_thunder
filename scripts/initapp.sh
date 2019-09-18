@@ -7,22 +7,8 @@ if [ $RESULT -lt 1 ]; then
           
 else
 echo "Database is not empty"
-if [ $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',") == ""]; then
-echo $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',")
-cat <<EOF | tee -a /var/www/html/thunder/sites/default/settings.php
-\$databases['default']['default'] = array (
-  'database' => '${MYSQL_DATABASE}',
-  'username' => '${MYSQL_USER}',
-  'password' => '${MYSQL_PASSWORD}',
-  'prefix' => '',
-  'host' => '${HOSTNAME}',
-  'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-);
-EOF
-fi
 
 fi
+echo "settings.php includes" $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',")
 chown -R nginx:nginx /var/www/html/thunder/sites/
 /var/www/html/thunder/vendor/bin/drush cr
