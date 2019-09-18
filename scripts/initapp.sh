@@ -6,7 +6,7 @@ if [ $RESULT -lt 1 ]; then
         cd /var/www/html/thunder/ && vendor/bin/drush -y si standard --db-url=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}/${MYSQL_DATABASE} --site-name=SiteName --account-name=admin --account-pass=admin
           
 else
-
+echo "Database is not empty"
 if [ $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',") == ""]; then
 echo $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',")
 cat <<EOF | tee -a /var/www/html/thunder/sites/default/settings.php
