@@ -27,4 +27,4 @@ fi
 
 fi
 chown -R nginx:nginx /var/www/html/thunder/sites/
-/var/www/html/thunder/vendor/bin/drush cr
+# /var/www/html/thunder/vendor/bin/drush cr
