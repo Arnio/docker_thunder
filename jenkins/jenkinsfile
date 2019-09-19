@@ -1,5 +1,5 @@
 node('') {
-properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']], pipelineTriggers([ pollSCM('H/5 * * * *')])])     
+properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']], pipelineTriggers([ pollSCM('H/5 * * * *'), ignorePostCommitHooks: true])])     
 
 stage('pullSCM') 
 {checkout([$class: 'GitSCM', 
@@ -7,7 +7,7 @@ stage('pullSCM')
     doGenerateSubmoduleConfigurations: false, 
     extensions: [[$class: 'CleanCheckout']], 
     submoduleCfg: [], 
-    userRemoteConfigs: [[credentialsId: 'jenkins-app-git-key', url: 'https://github.com/Arnio/docker_thunder.git']]
+    userRemoteConfigs: [[credentialsId: '${JENKINS_NAME}-git-key', url: 'https://github.com/Arnio/docker_thunder.git']]
 ])}
 stage ('buildInJankins')
   {openshiftBuild(namespace: '${JENKINS_NAME}', buildConfig: '${APP_NAME}', showBuildLogs: 'true',  waitTime: '3000000')}
