@@ -434,7 +434,7 @@ parameters:
   displayName: MySQL Database Name
   name: MYSQL_DATABASE
   required: true
-  value: drupal
+  value: drupal-${APP_NAME}
 
 - description: Volume space available for data, e.g. 512Mi, 2Gi.
   displayName: Volume Capacity
