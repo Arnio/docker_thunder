@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Template
+labels:
+  application: settings
+metadata:
+  name: settings
+  namespace: openshift
+objects:
+
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    name: alpine
+    namespace: openshift
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: docker.io/alpine:3.10
+      importPolicy: {}
+      name: "3.10"
+      referencePolicy:
+        type: Source
+
+- apiVersion: security.openshift.io/v1
+  kind: SecurityContextConstraints
+  metadata:
+    creationTimestamp: null
+    name: anyuid
+  fsGroup:
+    type: RunAsAny
+  groups:
+  - system:cluster-admins
+  requiredDropCapabilities:
+  - MKNOD
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users:
+  - system:serviceaccount:${APP_NAME}:default
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+  defaultAddCapabilities: null
+  allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  priority: 10
+  readOnlyRootFilesystem: false
+
+parameters:
+
+- description: Add app name to openshift
+  displayName: Add app name to openshift
+  name: APP_NAME
+  required: true

@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Template
+labels:
+  application: settings
+metadata:
+  name: settings
+  namespace: openshift
+objects:
+
+- apiVersion: user.openshift.io/v1
+  groups: null
+  identities:
+  - anypassword:${USER_NAME}
+  kind: User
+  metadata:
+    name: ${USER_NAME}
+
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: registry-controller
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: ${USER_NAME}
+
+parameters:
+
+- description: Add devops user to openshift
+  displayName: Add devops user to openshift
+  name: USER_NAME
+  required: true
+  value: devopsuser
