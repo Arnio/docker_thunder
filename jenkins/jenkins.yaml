@@ -232,7 +232,7 @@ objects:
         uri: "https://github.com/Arnio/docker_thunder"
     strategy:
       jenkinsPipelineStrategy:
-        jenkinsfilePath: jenkins-ci/jenkinsfile
+        jenkinsfilePath: jenkins/jenkinsfile
 
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
