@@ -262,7 +262,7 @@ objects:
               doGenerateSubmoduleConfigurations: false, 
               extensions: [[$class: 'CleanCheckout']], 
               submoduleCfg: [], 
-              userRemoteConfigs: [[credentialsId: 'jenkins-app-git-key', url: 'https://github.com/Arnio/php_alpine_base_image.git']]
+              userRemoteConfigs: [[credentialsId: '${JENKINS_NAME}-git-key', url: 'https://github.com/Arnio/php_alpine_base_image.git']]
           ])}
           stage ('buildInJankins')
             {openshiftBuild(namespace: '${JENKINS_NAME}', buildConfig: 'php-fpm-alpine', showBuildLogs: 'true',  waitTime: '3000000')}
@@ -297,12 +297,10 @@ objects:
       jenkinsPipelineStrategy:
         jenkinsfile: |-
           node('') {
-          options { 
-            timeout(time: 20, unit: 'MINUTES') 
-            }  
           stage ('deployInDevelopment')
             {openshiftDeploy(namespace: '${APP_NAME}', deploymentConfig: '${APP_NAME}', waitTime: '3000000')}
           stage ('VerifySiteOnline')
+          timeout(time: 20, unit: 'MINUTES')
             {sh '''#!/bin/bash
           while [ 1 ]; do
             http_response=$(curl -o /dev/null -s -w "%{http_code}\n" http://${APP_NAME}.${APP_NAME}.svc:80)
