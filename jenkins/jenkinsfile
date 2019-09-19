@@ -1,7 +1,7 @@
 node('') {
 properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']], pipelineTriggers([ pollSCM('H/2 * * * *')])])     
 
-stage('SCM') 
+stage('pullSCM') 
 {checkout([$class: 'GitSCM', 
     branches: [[name: '*/master']], 
     doGenerateSubmoduleConfigurations: false, 

@@ -297,8 +297,9 @@ objects:
       jenkinsPipelineStrategy:
         jenkinsfile: |-
           node('') {
-          stage ('buildInJankins')
-            {openshiftBuild(namespace: '${JENKINS_NAME}', buildConfig: '${APP_NAME}', showBuildLogs: 'true',  waitTime: '3000000')}
+          options { 
+            timeout(time: 20, unit: 'MINUTES') 
+            }  
           stage ('deployInDevelopment')
             {openshiftDeploy(namespace: '${APP_NAME}', deploymentConfig: '${APP_NAME}', waitTime: '3000000')}
           stage ('VerifySiteOnline')
