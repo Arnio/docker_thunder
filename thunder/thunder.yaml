@@ -434,7 +434,7 @@ parameters:
 
 - description: Name of the MySQL database accessed.
   displayName: MySQL Database Name
-  from: 'drupal[a-z0-9]{3}'
+  from: 'thunder[a-z0-9]{3}'
   generate: expression
   name: MYSQL_DATABASE
   required: true
