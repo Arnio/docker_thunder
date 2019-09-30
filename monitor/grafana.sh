@@ -27,7 +27,7 @@ protocol="https://"
 
 
 oc project openshift-infra
-oc process -f "${yaml}" |oc create -f -
+# oc process -f "${yaml}" |oc create -f -
 oc rollout status deployment/grafana
 oc adm policy add-role-to-user view -z grafana -n "${prometheus_namespace}"
 

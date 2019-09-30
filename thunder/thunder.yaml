@@ -328,6 +328,7 @@ objects:
   kind: Service
   metadata:
     annotations:
+      prometheus.io/scrape: "true"
       template.openshift.io/expose-uri: mysql://{.spec.clusterIP}:{.spec.ports[?(.name=="mysql")].port}
     labels:
       app: mysql-persistent
@@ -350,6 +351,7 @@ objects:
   kind: Service
   metadata:
     annotations:
+      prometheus.io/scrape: "true"
       openshift.io/generated-by: OpenShiftWebConsole
     labels:
       app: ${APP_NAME}
