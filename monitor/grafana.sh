@@ -1,7 +1,7 @@
 #!/bin/bash
 #######################################################
 datasource_name='prometheus'
-prometheus_namespace='openshift-infra'
+prometheus_namespace='kube-system'
 sa_reader='prometheus'
 graph_granularity='1m'
 yaml='grafana.yaml'
