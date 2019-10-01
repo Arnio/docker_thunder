@@ -28,6 +28,9 @@ supplementalGroups:
   type: RunAsAny
 users:
 - system:serviceaccount:openshift-infra:prometheus-node-exporter
+- system:serviceaccount:jenkins-ci:prometheus-node-exporter
+- system:serviceaccount:thunder:prometheus-node-exporter
+- system:serviceaccount:kube-system:prometheus-node-exporter
 volumes:
 - configMap
 - downwardAPI
