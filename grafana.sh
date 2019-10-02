@@ -25,6 +25,7 @@ protocol="https://"
 # mv "${dashboard_file}.bak" "${dashboard_file}"
 # }
 
+# oc process -f monitor/prometheus.yaml | oc apply -f -
 
 oc project openshift-infra
 # oc process -f "${yaml}" |oc create -f -
@@ -56,10 +57,10 @@ grafana_host="${protocol}$( oc get route grafana -o jsonpath='{.spec.host}' )"
 curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/datasources" -X POST -d "@${payload}"
 
 # # deploy openshift dashboard
-# dashboard_file="./openshift-cluster-monitoring.json"
+dashboard_file="./monitor/node-exporter-dashboard.json"
 # sed -i.bak "s/Xs/${graph_granularity}/" "${dashboard_file}"
 # sed -i.bak "s/\${DS_PR}/${datasource_name}/" "${dashboard_file}"
-# curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file}"
+curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file}"
 # mv "${dashboard_file}.bak" "${dashboard_file}"
 
 # ((node_exporter)) && node::exporter || echo "skip node exporter"
