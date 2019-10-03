@@ -11,4 +11,5 @@ echo "Database is not empty"
 fi
 echo "settings.php includes" $(cat /var/www/html/thunder/sites/default/settings.php | grep "'database' => '${MYSQL_DATABASE}',")
 chown -R nginx:nginx /var/www/html/thunder/sites/
+/var/www/html/thunder/vendor/bin/drush en prometheus_exporter
 /var/www/html/thunder/vendor/bin/drush cr

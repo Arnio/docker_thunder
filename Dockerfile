@@ -7,10 +7,10 @@ ADD /thunder-8.x-3.1-core.tar.gz /tmp/
 RUN mv /tmp/thunder-8.x-3.1 /var/www/html/thunder && \
     cd /var/www/html/thunder && \
     composer install --no-progress --profile --prefer-dist && \
-    composer require drush/drush:master && chown -R nginx:nginx /var/www/html && \
-    ln -s /var/www/html/thunder/vendor/bin/drush /usr/local/bin/ && \
+    composer require drush/drush:master && \
     composer require 'drupal/prometheus_exporter:1.x-dev' && \
-    drush en prometheus_exporter
+    chown -R nginx:nginx /var/www/html && \
+    ln -s /var/www/html/thunder/vendor/bin/drush /usr/local/bin/ 
     
 COPY ./default /etc/nginx/conf.d/default.conf
 COPY ./settings /tmp/settings
