@@ -63,20 +63,19 @@ check_key="$(oc get secret git-key -n $JENKINS_NAME 2>/dev/null | grep git-key)"
 
 if [ -z "$check_key" ]
 then
-oc create secret generic git-key --from-file=filename=id_rsa -n $JENKINS_NAME
+oc create secret generic git-key --from-file=filename=/mnt/c/minishift/id_rsa -n $JENKINS_NAME
 oc label secret git-key credential.sync.jenkins.openshift.io=true -n $JENKINS_NAME  
 fi
-#oc process -f docker_thunder/jenkins/settings_user.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n openshift
-oc process -f docker_thunder/jenkins/jenkins.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n $JENKINS_NAME
-oc start-build build-base-image -n jenkins-ci
+#oc process -f jenkins/settings_user.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n openshift
+oc process -f jenkins/jenkins.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n $JENKINS_NAME
 fi
 
 
 if [ $AppApply == "yes" ]
 then
 
-oc process -f docker_thunder/thunder/settings_app.yaml -p APP_NAME=$APP_NAME | oc apply -f - -n openshift
-oc process -f docker_thunder/thunder/thunder.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n $APP_NAME
+oc process -f thunder/settings_app.yaml -p APP_NAME=$APP_NAME | oc apply -f - -n openshift
+oc process -f thunder/thunder.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n $APP_NAME
 
 fi
 

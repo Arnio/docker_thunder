@@ -21,7 +21,8 @@ parameters:
   value: ""
 - description: The namespace to instantiate heapster under. Defaults to 'grafana'.
   name: NAMESPACE
-  value: openshift-infra
+  required: true
+  #value: openshift-infra
 - description: The session secret for the proxy
   name: SESSION_SECRET
   generate: expression

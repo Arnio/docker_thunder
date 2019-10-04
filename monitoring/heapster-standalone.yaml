@@ -30,7 +30,8 @@ parameters:
   value: "500"
 - description: The namespace to instantiate heapster under. Defaults to 'kube-system'.
   name: NAMESPACE
-  value: kube-system
+  #value: kube-system
+  required: true
 objects:
 - apiVersion: v1
   kind: ServiceAccount
@@ -94,7 +95,7 @@ objects:
             containerPort: 8082
           command:
           - "heapster-wrapper.sh"
-          - "--source=kubernetes:${MASTER_URL}?useServiceAccount=true&kubeletHttps=true&kubeletPort=10250"
+          - "--source=kubernetes:${MASTER_URL}?useServiceAccount=true&kubeletHttps=true&kubeletPort=10250&insecure=true"
           - "--tls_cert=/secrets/tls.crt"
           - "--tls_key=/secrets/tls.key"
           - "--tls_client_ca=/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
