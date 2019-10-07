@@ -1,5 +1,5 @@
 node('') {
-properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']], pipelineTriggers([ pollSCM('H/20 * * * *', ignorePostCommitHooks: true)])])     
+properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']], pipelineTriggers([ pollSCM(scmpoll_spec: 'H/20 * * * *', ignorePostCommitHooks: true)])])     
 
 stage('pullSCM') 
 {checkout([$class: 'GitSCM', 
