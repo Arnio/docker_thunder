@@ -9,6 +9,7 @@ RUN mv /tmp/thunder-8.x-3.1 /var/www/html/thunder && \
     composer install --no-progress --profile --prefer-dist && \
     composer require drush/drush:master && \
     composer require 'drupal/prometheus_exporter:1.x-dev' && \
+    composer require 'drupal/oauth2_server:^1.7' && \
     chown -R nginx:nginx /var/www/html && \
     ln -s /var/www/html/thunder/vendor/bin/drush /usr/local/bin/ 
     

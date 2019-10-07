@@ -1276,7 +1276,7 @@
         ],
         "targets": [
           {
-            "expr": "node_filesystem_size_bytes{instance=~'$node',fstype=~\"ext4|xfs\"}",
+            "expr": "node_filesystem_size_bytes{instance=~\"$node\",fstype=~\"ext4|xfs\"}",
             "format": "table",
             "hide": true,
             "instant": true,
@@ -1285,7 +1285,7 @@
             "refId": "C"
           },
           {
-            "expr": "node_filesystem_avail_bytes {instance=~'$node',fstype=~\"ext4|xfs\"}",
+            "expr": "node_filesystem_avail_bytes {instance=~\"$node\",fstype=~\"ext4|xfs\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1295,7 +1295,7 @@
             "refId": "A"
           },
           {
-            "expr": "1-(node_filesystem_free_bytes{instance=~'$node',fstype=~\"ext4|xfs\"} / node_filesystem_size_bytes{instance=~'$node',fstype=~\"ext4|xfs\"})",
+            "expr": "1-(node_filesystem_free_bytes{instance=~\"$node\",fstype=~\"ext4|xfs\"} / node_filesystem_size_bytes{instance=~\"$node\",fstype=~\"ext4|xfs\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1803,7 +1803,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "node_netstat_Tcp_CurrEstab{instance=~'$node'}",
+            "expr": "node_netstat_Tcp_CurrEstab{instance=~\"$node\"}",
             "format": "time_series",
             "hide": false,
             "interval": "10s",
@@ -1813,14 +1813,14 @@
             "step": 20
           },
           {
-            "expr": "node_sockstat_TCP_tw{instance=~'$node'}",
+            "expr": "node_sockstat_TCP_tw{instance=~\"$node\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{instance}}_TCP_tw",
             "refId": "D"
           },
           {
-            "expr": "irate(node_netstat_Tcp_ActiveOpens{instance=~'$node'}[1m])",
+            "expr": "irate(node_netstat_Tcp_ActiveOpens{instance=~\"$node\"}[1m])",
             "format": "time_series",
             "hide": false,
             "intervalFactor": 1,
@@ -1828,21 +1828,21 @@
             "refId": "B"
           },
           {
-            "expr": "irate(node_netstat_Tcp_PassiveOpens{instance=~'$node'}[1m])",
+            "expr": "irate(node_netstat_Tcp_PassiveOpens{instance=~\"$node\"}[1m])",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{instance}}_PassiveOpens",
             "refId": "C"
           },
           {
-            "expr": "node_sockstat_TCP_alloc{instance=~'$node'}",
+            "expr": "node_sockstat_TCP_alloc{instance=~\"$node\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{instance}}_TCP_alloc",
             "refId": "E"
           },
           {
-            "expr": "node_sockstat_TCP_inuse{instance=~'$node'}",
+            "expr": "node_sockstat_TCP_inuse{instance=~\"$node\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "{{instance}}_TCP_inuse",
@@ -2239,6 +2239,7 @@
         }
       }
     ],
+    "refresh": "5s",
     "schemaVersion": 14,
     "style": "dark",
     "tags": [
@@ -2438,7 +2439,7 @@
       ]
     },
     "time": {
-      "from": "now-30m",
+      "from": "now-5m",
       "to": "now"
     },
     "timepicker": {
