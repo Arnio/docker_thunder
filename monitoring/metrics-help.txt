@@ -1,0 +1,29 @@
+Metrics server for Minishift
+
+
+1. heapster is deprecated
+2. Check minishift addons and setup form the list below:
+minishift addons list
+- admin-user                     : enabled      P(0)
+- admissions-webhook             : enabled      P(0)
+- anyuid                         : enabled      P(0)
+
+3. Instructions - how to setuo metrics-server
+https://github.com/kubernetes-incubator/metrics-server
+https://stackoverflow.com/questions/53725248/how-to-enable-kubeapi-server-for-hpa-autoscaling-metrics
+https://blog.codewithdan.com/enabling-metrics-server-for-kubernetes-on-docker-desktop/
+
+4. Check if --authentication-token-webhook=true
+minishift ssh
+docker ps --no-trunc | grep "authentication-token-webhook=true"
+exit
+
+5. Setup metrics from yaml
+oc project kube-system
+oc process -f metrics-server.yaml | oc create -f - -n kube-system
+
+Check if cpu and memory metrics exist
+kubectl top pod --all-namespaces
+
+6. Bug for HPA:
+https://bugzilla.redhat.com/show_bug.cgi?id=1721428

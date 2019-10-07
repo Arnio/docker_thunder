@@ -43,7 +43,7 @@ then
 oc project $NAMESPACE
 oc process -f monitoring/prometheus.yaml -p NAMESPACE=$NAMESPACE | oc apply -f - -n $NAMESPACE
 oc process -f monitoring/grafana.yaml -p NAMESPACE=$NAMESPACE | oc apply -f - -n $NAMESPACE
-oc process -f monitoring/heapster-standalone.yaml -p NAMESPACE=$NAMESPACE | oc apply -f - -n $NAMESPACE
+oc process -f monitoring/metrics-server.yaml | oc apply -f - -n kube-system
 
 oc rollout status deployment/grafana
 oc adm policy add-role-to-user view -z grafana -n "${NAMESPACE}"
