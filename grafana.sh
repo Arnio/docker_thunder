@@ -80,8 +80,8 @@ dashboard_file_docker="./monitoring/docker_containers.json"
 curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file_docker}"
 dashboard_file_docker_1="./monitoring/docker_host.json"
 curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file_docker_1}"
-#dashboard_file_kubernetes_pod="./monitoring/monitor_services.json"
-#curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file_kubernetes_pod}"
+dashboard_file_drupal_metrics="./monitoring/drupal_metrics.json"
+curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file_drupal_metrics}"
 # ((node_exporter)) && node::exporter || echo "skip node exporter"
 
 # exit 0
