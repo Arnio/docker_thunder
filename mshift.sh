@@ -1,4 +1,7 @@
 #!/bin/bash
+ssh_rsa="/SSHkey/id_rsa"
+
+
 #######################################################
 if [ -n "$1" ]; then
   APP_NAME=$1
@@ -63,7 +66,7 @@ check_key="$(oc get secret git-key -n $JENKINS_NAME 2>/dev/null | grep git-key)"
 
 if [ -z "$check_key" ]
 then
-oc create secret generic git-key --from-file=filename=/mnt/c/minishift/id_rsa -n $JENKINS_NAME
+oc create secret generic git-key --from-file=filename=$ssh_rsa -n $JENKINS_NAME
 oc label secret git-key credential.sync.jenkins.openshift.io=true -n $JENKINS_NAME  
 fi
 #oc process -f jenkins/settings_user.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n openshift
