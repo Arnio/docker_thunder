@@ -46,7 +46,7 @@ oc process -f monitoring/grafana.yaml -p NAMESPACE=$NAMESPACE | oc apply -f - -n
 oc process -f monitoring/metrics-server.yaml | oc apply -f - -n kube-system
 
 oc rollout status deployment/grafana
-oc adm policy add-role-to-user view -z grafana -n "${NAMESPACE}"
+oc adm policy add-role-to-user view -z grafana -n $NAMESPACE
 
 payload="$( mktemp )"
 cat <<EOF >"${payload}"
@@ -71,13 +71,9 @@ EOF
 # setup grafana data source
 grafana_host="${protocol}$( oc get route grafana -o jsonpath='{.spec.host}' )"
 curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/datasources" -X POST -d "@${payload}"
-
 # # deploy openshift dashboard
 dashboard_file="./monitoring/node-exporter-dashboard.json"
-
 curl --insecure -H "Content-Type: application/json" -u admin:admin "${grafana_host}/api/dashboards/db" -X POST -d "@${dashboard_file}"
-
-
 # ((node_exporter)) && node::exporter || echo "skip node exporter"
 
 # exit 0
