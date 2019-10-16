@@ -51,7 +51,7 @@ objects:
     name: mysql-pvc
   spec:
     accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
     resources:
       requests:
         storage: ${VOLUME_CAPACITY}
@@ -62,7 +62,7 @@ objects:
     name: 4g
   spec:
     accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
     resources:
       requests:
         storage: 4Gi
@@ -73,7 +73,7 @@ objects:
     name: 5g
   spec:
     accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
     resources:
       requests:
         storage: 5Gi
@@ -84,7 +84,7 @@ objects:
     name: site-pvc
   spec:
     accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
     resources:
       requests:
         storage: 15Gi
@@ -288,12 +288,12 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /var/log/nginx
+              - mountPath: /var/log
                 name: ${APP_NAME}-nginx-log
               - mountPath: /var/www/html/thunder/sites/default
                 name: app-sites
-              - mountPath: /var/log/php7
-                name: php-log
+              # - mountPath: /var/log/php7
+              #   name: php-log
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler

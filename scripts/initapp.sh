@@ -1,4 +1,6 @@
 apk add mysql-client
+mkdir /var/log/nginx
+mkdir /var/log/php7
 RESULT=`MYSQL_PWD="$MYSQL_PASSWORD" mysql -h $MYSQL_HOST -u $MYSQL_USER -D $MYSQL_DATABASE -e 'SHOW TABLES' | grep -o node | wc -l`
 if [ $RESULT -lt 1 ]; then
         mv /tmp/settings/*.* /var/www/html/thunder/sites/default/

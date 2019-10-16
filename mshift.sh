@@ -66,7 +66,7 @@ then
 oc create secret generic git-key --from-file=filename=/mnt/c/minishift/id_rsa -n $JENKINS_NAME
 oc label secret git-key credential.sync.jenkins.openshift.io=true -n $JENKINS_NAME  
 fi
-#oc process -f jenkins/settings_user.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n openshift
+#oc process -f jenkins/settings_user.yaml | oc apply -f - -n openshift
 oc process -f jenkins/jenkins.yaml -p APP_NAME=$APP_NAME -p JENKINS_NAME=$JENKINS_NAME | oc apply -f - -n $JENKINS_NAME
 fi
 
