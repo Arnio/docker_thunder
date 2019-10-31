@@ -56,27 +56,44 @@ objects:
       requests:
         storage: ${VOLUME_CAPACITY}
 
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: 4g
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 4Gi
+# - apiVersion: "v1"
+#   kind: PersistentVolume
+#   metadata:
+#     name: mysql-pv
+#   spec:
+#     capacity:
+#       storage: "5Gi" 
+#     accessModes:
+#       - "ReadWriteOnce"
+#     azureDisk: 
+#       diskName: mysqldb.vhd 
+#       diskURI: https://arnidatabase.blob.core.windows.net/mysql/mysqldb.vhd
+#       cachingMode: ReadWrite  
+#       fsType: ext4  
+#       readOnly: false  
 
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: 5g
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 5Gi
+
+# - apiVersion: v1
+#   kind: PersistentVolumeClaim
+#   metadata:
+#     name: 4g
+#   spec:
+#     accessModes:
+#     - ReadWriteOnce
+#     resources:
+#       requests:
+#         storage: 4Gi
+
+# - apiVersion: v1
+#   kind: PersistentVolumeClaim
+#   metadata:
+#     name: 5g
+#   spec:
+#     accessModes:
+#     - ReadWriteOnce
+#     resources:
+#       requests:
+#         storage: 5Gi
 
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -180,8 +197,12 @@ objects:
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
-        securityContext: {}
+        securityContext:
+          capabilities: {}
+          privileged: false
         terminationGracePeriodSeconds: 30
+        serviceAccount: deployer
+        serviceAccountName: deployer
         volumes:
         - name: mysql-base
           persistentVolumeClaim:
@@ -230,8 +251,8 @@ objects:
             containerName: ${APP_NAME}
             volumes:
               - app-sites
-              - ${APP_NAME}-nginx-log
-              - php-log
+              # - ${APP_NAME}-nginx-log
+              # - php-log
           failurePolicy: Abort
         timeoutSeconds: 800
         updatePeriodSeconds: 1
@@ -288,8 +309,8 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /var/log
-                name: ${APP_NAME}-nginx-log
+              # - mountPath: /var/log
+              #   name: ${APP_NAME}-nginx-log
               - mountPath: /var/www/html/thunder/sites/default
                 name: app-sites
               # - mountPath: /var/log/php7
@@ -300,15 +321,15 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-          - name: ${APP_NAME}-nginx-log
-            persistentVolumeClaim:
-              claimName: 5g
+          # - name: ${APP_NAME}-nginx-log
+          #   persistentVolumeClaim:
+          #     claimName: 5g
           - name: app-sites
             persistentVolumeClaim:
               claimName: site-pvc
-          - name: php-log
-            persistentVolumeClaim:
-              claimName: 4g
+          # - name: php-log
+          #   persistentVolumeClaim:
+          #     claimName: 4g
     test: false
     triggers:
       - imageChangeParams:

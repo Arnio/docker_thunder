@@ -1,5 +1,5 @@
 #!/bin/bash
-ssh_rsa="/SSHkey/id_rsa"
+ssh_rsa="/mnt/c/Users/akraso/Documents/akraso_sshkey/id_rsa"
 
 
 #######################################################
